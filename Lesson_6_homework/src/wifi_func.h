@@ -1,3 +1,4 @@
+#pragma once
 #include "config.h"
 #include <Arduino.h>
 #include <WiFi.h>
@@ -31,11 +32,22 @@ HTTPClient http;
 http.begin(SERVER_URL);
 http.addHeader("Content-Type", "application/json");
 
-char payload[128];
+char tBuf[16], hBuf[16];
+
+if (sensorpayload.statuscheck & STATUS_DHT_ERR) {
+strcpy(tBuf, "null");
+strcpy(hBuf, "null");
+} else {
+snprintf(tBuf, sizeof(tBuf), "%.1f", dhttpayload.temperature);
+snprintf(hBuf, sizeof(hBuf), "%.1f", dhttpayload.humidity);
+}
+
+char payload[160];
 snprintf(payload, sizeof(payload),
-"{\"temperature\":%.1f,\"humidity\":%.1f,\"lux\":%.1f}", temperature, humidity, lux);
+"{\"temperature\":%s,\"humidity\":%s,\"lux\":%.1f,\"status\":%u}",
+tBuf, hBuf, ldrpayload.lux, sensorpayload.statuscheck);
 Serial.print("[HTTP] sending:"); Serial.println(payload);
-int httpCode = http.POST((u_int8_t*)payload, strlen(payload));
+int httpCode = http.POST((uint8_t*)payload, strlen(payload));
 
 if(httpCode == 200){
     Serial.println("[HTTP] data delivered successfully");

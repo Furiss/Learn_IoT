@@ -76,6 +76,8 @@ if(switch_state){
             digitalWrite(LED_PIN, LOW);
         }
 
+    }
+    
         if ((now - lastCollection) > COLECTION_INTERVAL) {
             sensorpayload.dhtt = dhttpayload;
             sensorpayload.ldr = ldrpayload;
@@ -84,14 +86,11 @@ if(switch_state){
             lastCollection = now;
             Serial.println("Data collected");
             printStatus();
-
         }
-
-        if ((now - lastSend) > SEND_INTERVAL) {
+            if ((now - lastSend) > SEND_INTERVAL) {
             sendData(dhttpayload.temperature, dhttpayload.humidity, ldrpayload.lux);
             lastSend = now;
         }
-    }
 }
  if (!switch_state) {
     digitalWrite(LED_PIN, LOW);
