@@ -3,8 +3,8 @@
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 
-#include "../config.h"
-#include "../secrets.h"
+#include "config.h"
+#include "secrets.h"
 
 static WiFiClientSecure net;
 PubSubClient mqttClient(net);

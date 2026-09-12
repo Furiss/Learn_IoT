@@ -93,7 +93,6 @@ void loop()
 {
     if (mqttClient.connected())
     {
-        reconnectAttempts = 1;
         mqttClient.loop();
     }
     else
@@ -105,23 +104,16 @@ void loop()
             if (now - lastReconnect > RECONNECT_INTERVAL)
             {
                 lastReconnect = now;
-
-                Serial.print(
-                    "MQTT lost connection. Reconnecting attempt: "
-                );
+                Serial.print("MQTT lost connection. Reconnecting attempt: ");
                 Serial.println(reconnectAttempts);
 
                 connectMQTT();
-
                 reconnectAttempts++;
             }
         }
         else
         {
-            Serial.println(
-                "Too many reconnection attempts. Restarting device"
-            );
-
+            Serial.println("Too many reconnection attempts. Restarting device");
             delay(1000);
             ESP.restart();
         }
