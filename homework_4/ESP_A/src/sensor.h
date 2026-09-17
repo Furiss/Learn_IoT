@@ -20,7 +20,7 @@ bool lastButtonState = HIGH;
 bool buttonState = HIGH;
 
 void ButtonAction(){
-    bool ok = mqttClient.publish(TOPIC_COMANDS, "manual_read");
+    bool ok = mqttClient.publish(TOPIC_COMMANDS, "manual_read");
     Serial.println(ok ? "Comand sended" : "Comand failed");
 }
 void buttonHandler() {

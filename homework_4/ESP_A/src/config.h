@@ -23,4 +23,4 @@
 #define MQTT_PORT 1883
 #define MQTT_CLIENT_ID "esp32-vlasenko-a"
 #define TOPIC_SENSORS "iot-course/vlasenko/sensors"
-#define TOPIC_COMANDS "iot-course/vlasenko/comands"
+#define TOPIC_COMMANDS "iot-course/vlasenko/commands"

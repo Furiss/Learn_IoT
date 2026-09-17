@@ -3,8 +3,15 @@
 #include <PubSubClient.h>
 #include "wifi_mqtt.h"
 
+
+
 unsigned long lastReconnect = 0;
 int reconnectAttempts = 1;
+bool blinkReq = false;
+bool ledStateBefore = LOW;
+
+int blinksLeft = 0;
+unsigned long lastBlink = 0;
 
 void onMessage(char* topic, byte* payload, unsigned int length) {
     char message[length + 1];
@@ -35,25 +42,19 @@ void onMessage(char* topic, byte* payload, unsigned int length) {
         Serial.println("No LED changes. Temperature in normal");
     }
 }
-    else if(strcmp(topic, TOPIC_COMANDS) == 0){
+    else if(strcmp(topic, TOPIC_COMMANDS) == 0){
         if(strcmp(message, "manual_read") == 0){
             Serial.println("Manual trigger received");
-            for(int i = 0; i<3; i++){
-                digitalWrite(LED_PIN, HIGH);
-                delay(200);
-                digitalWrite(LED_PIN, LOW);
-                delay(200);
-/*
-мені здалось що тут блокуючий delay підходить краще неблокуючого таймеру.
-Якщо це не так, дайте мені знати =)
-*/
+
+            blinkReq = true;
+
             }
         }
         else{
             Serial.println("Comand recived, but its not a trigger");
         }
     }
-}
+
 
 
 void setup() {
@@ -73,7 +74,7 @@ connectMQTT();
 
 void loop(){
     if (mqttClient.connected()) {
-
+        reconnectAttempts = 1;
         mqttClient.loop();
     } else {
 
@@ -92,4 +93,21 @@ void loop(){
         ESP.restart();
     }
 }
+if (blinkReq){
+    if (blinksLeft == 0){
+        ledStateBefore = digitalRead(LED_PIN);
+        blinksLeft = BLINK_SWITCHES;
+        lastBlink = millis();
+    }
+    if(millis() - lastBlink >= BLINK_INTERVAL){
+        digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+        lastBlink = millis();
+        blinksLeft --;
+    }
+    if(blinksLeft == 0){
+        digitalWrite(LED_PIN, ledStateBefore);
+        blinkReq = false;
+    }
 }
+}
+

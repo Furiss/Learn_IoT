@@ -1,6 +1,5 @@
 #pragma once
 #include "config.h"
-#include "sensor.h"
 #include <WiFi.h>
 #include <PubSubClient.h>
 
@@ -33,8 +32,8 @@ Serial.print("Connecting to "); Serial.print(MQTT_BROKER); Serial.print("...");
 
         mqttClient.subscribe(TOPIC_SENSORS, 1);
         Serial.print("subscribed to: "); Serial.println(TOPIC_SENSORS);
-        mqttClient.subscribe(TOPIC_COMANDS, 1);
-         Serial.print("subscribed to: "); Serial.println(TOPIC_COMANDS);
+        mqttClient.subscribe(TOPIC_COMMANDS, 1);
+         Serial.print("subscribed to: "); Serial.println(TOPIC_COMMANDS);
 
         return true;
     }
