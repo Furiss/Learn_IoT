@@ -34,13 +34,23 @@ void loop()
 {
     unsigned long now = millis();
 
-    if (now - lastDHTread > DHT_INTERVAL)
-    {
-        dhtpayload.temperature = dht.readTemperature();
-        dhtpayload.humidity = dht.readHumidity();
+if (now - lastDHTread > DHT_INTERVAL)
+{
+    float t = dht.readTemperature();
+    float h = dht.readHumidity();
 
-        lastDHTread = now;
+    if (isnan(t) || isnan(h))
+    {
+        Serial.println("DHT read error, skipping");
     }
+    else
+    {
+        dhtpayload.temperature = t;
+        dhtpayload.humidity = h;
+    }
+
+    lastDHTread = now;
+}
 
     if (mqttClient.connected())
     {

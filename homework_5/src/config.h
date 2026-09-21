@@ -7,7 +7,7 @@
 
 // Intervals
 #define DHT_INTERVAL 10000
-#define PUBLISH_INTERVAL 10000
+#define PUBLISH_INTERVAL 30000
 #define RECONNECT_INTERVAL 5000
 
 // WiFi
