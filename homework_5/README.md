@@ -14,10 +14,14 @@ iot_core --> iot_rule
 iot_rule -->|"StoreData rule"| dynamodb
 iot_rule -->|"Hight_temperature rule <br/>Temperature > 28"| cloudwatch
 ```
+Сертифікат який вже був залитий в репозиторій я замінив
 
 ![Certificate](screenshots/Sertificate.PNG)
+
 До сертифікату прив'язаний Policy "ESP32-Vlasenko-homework-5-Publish"
+
 ![Policy](screenshots/Policy.PNG)
+
 Ось його вміст:
 {
   "Version": "2012-10-17",  
