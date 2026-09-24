@@ -11,25 +11,27 @@ FastAPI та HTML-сторінку взято з матеріалів курсу
 ## Архітектура
 
 ```mermaid
-flowchart TB
-    html["HTML<br/>Увімк. / Вимк."]
-    grafana["Grafana<br/>Infinity"]
-    api["FastAPI :8000<br/>/sensors/latest · /sensors/history · /sensors/events"]
-    iot["AWS IoT Core"]
-    rules["IoT Rules<br/>StoreData · DynamoDB_events"]
-    db["DynamoDB<br/>IoT_Data<br/>IoT_Events"]
-    logs["CloudWatch Logs<br/>log group: iot-errors"]
+%%{init: {"flowchart": {"curve": "stepAfter", "nodeSpacing": 35, "rankSpacing": 55}}}%%
+flowchart LR
     esp["ESP32<br/>DHT22 · LED"]
+    iot["AWS IoT Core<br/>MQTT / TLS :8883"]
+    rules["IoT Rules<br/>StoreData<br/>DynamoDB_events"]
+    db["DynamoDB<br/>IoT_Data<br/>IoT_Events"]
+    api["FastAPI<br/>:8000"]
+    grafana["Grafana<br/>Infinity"]
+    html["HTML<br/>Увімк. / Вимк."]
+    logs["CloudWatch Logs<br/>iot-errors"]
+
+    esp -->|"/data · /events"| iot
+    iot --> rules
+    rules -->|"DynamoDBv2"| db
+    db -->|"Читання даних"| api
+    api -->|"GET /sensors/*"| grafana
 
     html -->|"POST /actuators/led"| api
-    api -->|"дані через GET"| grafana
-    api -->|"команда, QoS 1"| iot
-    db -->|"Query"| api
-    iot -->|"телеметрія та події"| rules
-    rules -->|"DynamoDBv2"| db
-    rules -->|"Error action (усі Rules)"| logs
-    iot -->|"/commands/led · MQTT over TLS :8883"| esp
-    esp -->|"/data — температура й вологість<br/>/events — підтвердження led_changed<br/>MQTT over TLS :8883"| iot
+    api -->|"Команда · QoS 1"| iot
+    iot -->|"/commands/led"| esp
+    rules -->|"Error action"| logs
 ```
 
 DHT22 підключений до GPIO 4, LED — до GPIO 2.
