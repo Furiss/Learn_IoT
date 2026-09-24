@@ -190,6 +190,11 @@ IAM Policy бекенда
 **ESP32:** відкрити `ESP32/` у VS Code з PlatformIO та Wokwi. Скопіювати `src/secrets.example.h` у `src/secrets.h`, заповнити Wi-Fi, AWS endpoint, Thing і сертифікати з ключем. Запуск: **PlatformIO: Build → Wokwi: Start Simulator**.
 
 **FastAPI:** створити `.env` із `FastAPI/.env.example`, заповнити AWS-ключі та звірити регіон, назви таблиць і `DEVICE_ID` (має збігатися з `THINGNAME`).
+Запуск із теки `FastAPI/` після встановлення залежностей із `requirements.txt` та активації віртуального оточення:
+
+```powershell
+fastapi dev main.py
+```
 
 API: [localhost:8000/docs](http://localhost:8000/docs). **HTML:** відкрити `HTML/index.html` через Live Server на порту `5501`; адреса бекенда в сторінці — `http://localhost:8000`.
 
